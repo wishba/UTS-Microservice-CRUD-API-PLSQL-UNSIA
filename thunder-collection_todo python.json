@@ -1,0 +1,75 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "todo python",
+    "dateExported": "2023-12-13T08:29:52.269Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "5059d367-c912-46eb-97de-c42a7a1d4d85",
+            "colId": "106d4f1e-615b-4c7b-b6c0-4f18d2d7d024",
+            "containerId": "",
+            "name": "http://localhost:8000/tasks/1",
+            "url": "http://localhost:8000/tasks/3",
+            "method": "DELETE",
+            "sortNum": 10000,
+            "created": "2023-12-13T07:44:42.867Z",
+            "modified": "2023-12-13T07:44:42.867Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "642a21b7-4df3-4db5-9a61-c8d024e63534",
+            "colId": "106d4f1e-615b-4c7b-b6c0-4f18d2d7d024",
+            "containerId": "",
+            "name": "http://localhost:8000/tasks/1",
+            "url": "http://localhost:8000/tasks/1",
+            "method": "PUT",
+            "sortNum": 20000,
+            "created": "2023-12-13T07:45:06.531Z",
+            "modified": "2023-12-13T07:45:06.531Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"task_name\": \"Updated task name\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "6787ffca-0848-4172-8400-7c8ff715be67",
+            "colId": "106d4f1e-615b-4c7b-b6c0-4f18d2d7d024",
+            "containerId": "",
+            "name": "http://localhost:8000/tasks",
+            "url": "http://localhost:8000/tasks",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-12-13T07:45:12.563Z",
+            "modified": "2023-12-13T07:45:12.563Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"task_name\": \"New task from Thunder Client\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "613db439-16a1-4b14-8f06-ec571c8fedac",
+            "colId": "106d4f1e-615b-4c7b-b6c0-4f18d2d7d024",
+            "containerId": "",
+            "name": "http://localhost:8000/tasks",
+            "url": "http://localhost:8000/tasks",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-12-13T07:45:19.978Z",
+            "modified": "2023-12-13T07:45:19.978Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
