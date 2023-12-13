@@ -5,7 +5,7 @@
 -   Sudah terinstal python dan postgresql
 -   Jalankan command `pip install psycopg2 dotenv`
 
-## Cara menjalankan program
+## Cara menjalankan program todo api
 
 1. Download code
 2. Jalankan pgAdmin dan buat database bernama todo
