@@ -33,7 +33,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"user_name\": \"wisnu bayu\",\n  \"user_role\": \"web dev\"\n}",
+					"raw": "{\n  \"user_name\": \"wisnu bayu\",\n  \"user_password\": \"web dev\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -62,7 +62,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"user_name\": \"wisnu bayu\",\n  \"user_role\": \"operator\"\n}",
+					"raw": "{\n  \"user_name\": \"wisnu bayu\",\n  \"user_password\": \"operator\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

@@ -1,7 +1,7 @@
 CREATE TABLE data_user (
  	id SERIAL PRIMARY KEY,
 	user_name bytea,
- 	user_role bytea
+ 	user_password bytea
 );
 
 
@@ -14,7 +14,7 @@ $$ LANGUAGE plpgsql;
 
 
 ---- insert encrypted user
---INSERT INTO data_user (user_name, user_role)
+--INSERT INTO data_user (user_name, user_password)
 --VALUES (encrypt_data('wisnu bayu', 'admin_password'), encrypt_data('operator', 'admin_password'));
 
 
@@ -25,7 +25,7 @@ $$ LANGUAGE plpgsql;
 --  'wisnu bayu aji',
 --  'admin_password'
 --),
---user_role = encrypt_data(
+--user_password = encrypt_data(
 --	'operator',
 --	'admin_password'
 --)
@@ -40,7 +40,7 @@ $$ LANGUAGE plpgsql;
 --SELECT 
 --id, 
 --pgp_sym_decrypt(user_name, 'admin_password') AS user_name, 
---pgp_sym_decrypt(user_role, 'admin_password') AS user_role
+--pgp_sym_decrypt(user_password, 'admin_password') AS user_password
 --FROM data_user;
 
 

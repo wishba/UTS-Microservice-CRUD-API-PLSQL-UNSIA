@@ -28,13 +28,13 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         cursor.execute("""
                        SELECT id, 
                        pgp_sym_decrypt(user_name, %s) as user_name, 
-                       pgp_sym_decrypt(user_role, %s) as user_name
+                       pgp_sym_decrypt(user_password, %s) as user_name
                        FROM data_user
                        """, (ADMIN_PASSWORD, ADMIN_PASSWORD))
 
         user = []
         for row in cursor:
-            user.append({"id": row[0], "user_name": row[1], "user_role": row[2]})
+            user.append({"id": row[0], "user_name": row[1], "user_password": row[2]})
 
         cursor.close()
         connection.close()
@@ -50,7 +50,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         data = json.loads(body)
 
         user_name = data.get('user_name')
-        user_role = data.get('user_role')
+        user_password = data.get('user_password')
 
         try:
             connection = psycopg2.connect(host=DB_HOST, dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
@@ -63,9 +63,9 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         cursor = connection.cursor()
 
         cursor.execute("""
-                       INSERT INTO data_user (user_name, user_role) 
+                       INSERT INTO data_user (user_name, user_password) 
                        VALUES (encrypt_data(%s, %s), encrypt_data(%s, %s))
-                       """, (user_name, ADMIN_PASSWORD, user_role, ADMIN_PASSWORD))
+                       """, (user_name, ADMIN_PASSWORD, user_password, ADMIN_PASSWORD))
         connection.commit()
 
         cursor.close()
@@ -87,7 +87,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             data = json.loads(body)
 
             updated_user_name = data.get('user_name')
-            updated_user_role = data.get('user_role')
+            updated_user_password = data.get('user_password')
 
             try:
                 connection = psycopg2.connect(host=DB_HOST, dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
@@ -103,9 +103,9 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                            UPDATE data_user 
                            SET 
                            user_name = encrypt_data(%s, %s) ,
-                           user_role = encrypt_data(%s, %s)
+                           user_password = encrypt_data(%s, %s)
                            WHERE id = %s
-                           """, (updated_user_name, ADMIN_PASSWORD, updated_user_role, ADMIN_PASSWORD, user_id))
+                           """, (updated_user_name, ADMIN_PASSWORD, updated_user_password, ADMIN_PASSWORD, user_id))
             connection.commit()
 
             cursor.close()

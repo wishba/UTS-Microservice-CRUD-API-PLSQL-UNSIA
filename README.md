@@ -33,9 +33,7 @@
 
     ![delete](screenshot/delete.png)
 
-## Pengaplikasian Enkripsi AES256
-
-### Perbandingan Select Data
+## Contoh Pengaplikasian Enkripsi AES256
 
 -   Jika tidak memasukan password
 
