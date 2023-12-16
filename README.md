@@ -15,6 +15,8 @@
 6. Nyalakan server dengan command `python main.py`
 7. Jalankan program todo API menggunakan postman atau software sejenis. Untuk mempermudah bisa import `collection_todo.json` pada postman
 
+## Contoh Menjalankan Menggunakan Postman
+
 -   Create
     ![create](screenshot/create.png)
 
@@ -26,3 +28,13 @@
 
 -   Delete
     ![delete](screenshot/delete.png)
+
+## Pengaplikasian Enkripsi AES256
+
+### Perbandingan Select Data
+
+-   Jika tidak memasukan password
+    ![no password](screenshot/no%20password.png)
+
+-   Jika memasukan password
+    ![dengan password](screenshot/dengan%20password.png)
