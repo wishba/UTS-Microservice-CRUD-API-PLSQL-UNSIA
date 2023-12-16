@@ -5,23 +5,24 @@
 -   Sudah terinstal python dan postgresql
 -   Jalankan command `pip install psycopg2 dotenv`
 
-## Cara menjalankan program todo api
+## Cara menjalankan program todo API
 
 1. Download code
-2. Jalankan pgAdmin dan buat database bernama todo
-3. Pada database todo buka query tool dan masukan `query.sql` untuk membuat table task
-4. Buka `.env.example` lalu sesuaikan code didalamnya. Setelah itu rename file menjadi `.env`
-5. Jalankan program dengan command `python main.py`
-6. Test program menggunakan postman atau software sejenis. Untuk mengetes bisa import `collection_todo.json`
+2. Jalankan pgAdmin dan buat database bernama `todo`
+3. Pada database `todo` buka psql tool dan input command `CREATE EXTENSION pgcrypto;` untuk install ekstensi pgcrypto
+4. Pada database `todo` buka query tool dan masukan `tasks_encrypt.sql` untuk membuat table task dan fungsi encrypt_tasks
+5. Buka `.env.example` lalu sesuaikan code didalamnya. Setelah itu rename file menjadi `.env`
+6. Jalankan program dengan command `python main.py`
+7. Gunakan program API menggunakan postman atau software sejenis. Untuk mengetes bisa import `collection_todo.json`
 
 -   Create
-    ![create](create.png)
+    ![create](screenshot/create.png)
 
 -   Read
-    ![read](read.png)
+    ![read](screenshot/read.png)
 
 -   Update
-    ![update](update.png)
+    ![update](screenshot/update.png)
 
 -   Delete
-    ![delete](delete.png)
+    ![delete](screenshot/delete.png)
