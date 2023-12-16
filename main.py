@@ -10,7 +10,7 @@ DB_HOST = os.getenv("DB_HOST")
 DB_NAME = os.getenv("DB_NAME")
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
-MY_TODO_PASSWORD = os.getenv("MY_TODO_PASSWORD")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
 class MyRequestHandler(BaseHTTPRequestHandler):
 
@@ -26,13 +26,15 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         cursor = connection.cursor()
 
         cursor.execute("""
-                       SELECT id, pgp_sym_decrypt(task_name, '{}') as decrypted_tasks 
-                       FROM tasks_encrypt
-                       """.format(MY_TODO_PASSWORD))
+                       SELECT id, 
+                       pgp_sym_decrypt(user_name, %s) as user_name, 
+                       pgp_sym_decrypt(user_role, %s) as user_name
+                       FROM data_user
+                       """, (ADMIN_PASSWORD, ADMIN_PASSWORD))
 
-        tasks = []
+        user = []
         for row in cursor:
-            tasks.append({"id": row[0], "task_name": row[1]})
+            user.append({"id": row[0], "user_name": row[1], "user_role": row[2]})
 
         cursor.close()
         connection.close()
@@ -40,14 +42,15 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
-        self.wfile.write(json.dumps(tasks).encode())
+        self.wfile.write(json.dumps(user).encode())
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         body = self.rfile.read(content_length).decode()
         data = json.loads(body)
 
-        task_name = data.get('task_name')
+        user_name = data.get('user_name')
+        user_role = data.get('user_role')
 
         try:
             connection = psycopg2.connect(host=DB_HOST, dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
@@ -60,9 +63,9 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         cursor = connection.cursor()
 
         cursor.execute("""
-                       INSERT INTO tasks_encrypt (task_name) 
-                       VALUES (encrypt_tasks(%s, '{}'))
-                       """.format(MY_TODO_PASSWORD), (task_name,))
+                       INSERT INTO data_user (user_name, user_role) 
+                       VALUES (encrypt_data(%s, %s), encrypt_data(%s, %s))
+                       """, (user_name, ADMIN_PASSWORD, user_role, ADMIN_PASSWORD))
         connection.commit()
 
         cursor.close()
@@ -71,19 +74,20 @@ class MyRequestHandler(BaseHTTPRequestHandler):
         self.send_response(201)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
-        self.wfile.write(json.dumps({"message": "Task added successfully"}).encode())
+        self.wfile.write(json.dumps({"message": "user added successfully"}).encode())
 
     def do_PUT(self):
         path = self.path.split("/")
 
         if len(path) >= 3 and path[2].isdigit():
-            task_id = int(path[2])
+            user_id = int(path[2])
 
             content_length = int(self.headers['Content-Length'])
             body = self.rfile.read(content_length).decode()
             data = json.loads(body)
 
-            updated_task_name = data.get('task_name')
+            updated_user_name = data.get('user_name')
+            updated_user_role = data.get('user_role')
 
             try:
                 connection = psycopg2.connect(host=DB_HOST, dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
@@ -96,10 +100,12 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             cursor = connection.cursor()
 
             cursor.execute("""
-                           UPDATE tasks_encrypt 
-                           SET task_name = encrypt_tasks(%s, '{}') 
+                           UPDATE data_user 
+                           SET 
+                           user_name = encrypt_data(%s, %s) ,
+                           user_role = encrypt_data(%s, %s)
                            WHERE id = %s
-                           """.format(MY_TODO_PASSWORD), (updated_task_name, task_id))
+                           """, (updated_user_name, ADMIN_PASSWORD, updated_user_role, ADMIN_PASSWORD, user_id))
             connection.commit()
 
             cursor.close()
@@ -108,13 +114,13 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
-            self.wfile.write(json.dumps({"message": "Task updated successfully"}).encode())
+            self.wfile.write(json.dumps({"message": "user updated successfully"}).encode())
 
     def do_DELETE(self):
         path = self.path.split("/")
 
         if len(path) >= 3 and path[2].isdigit():
-            task_id = int(path[2])
+            user_id = int(path[2])
 
             try:
                 connection = psycopg2.connect(host=DB_HOST, dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD)
@@ -127,8 +133,8 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             cursor = connection.cursor()
 
             cursor.execute("""
-                           DELETE FROM tasks_encrypt WHERE id = %s
-                           """, (task_id,))
+                           DELETE FROM data_user WHERE id = %s
+                           """, (user_id,))
             connection.commit()
 
             cursor.close()
@@ -137,7 +143,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
-            self.wfile.write(json.dumps({"message": "Task deleted successfully"}).encode())
+            self.wfile.write(json.dumps({"message": "user deleted successfully"}).encode())
 
 PORT = 8000
 
