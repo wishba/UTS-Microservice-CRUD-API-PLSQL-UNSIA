@@ -10,6 +10,7 @@ DB_HOST = os.getenv("DB_HOST")
 DB_NAME = os.getenv("DB_NAME")
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
+MY_TODO_PASSWORD = os.getenv("MY_TODO_PASSWORD")
 
 class MyRequestHandler(BaseHTTPRequestHandler):
 
@@ -24,7 +25,10 @@ class MyRequestHandler(BaseHTTPRequestHandler):
 
         cursor = connection.cursor()
 
-        cursor.execute("SELECT * FROM tasks")
+        cursor.execute("""
+                       SELECT id, pgp_sym_decrypt(task_name, '{}') as decrypted_tasks 
+                       FROM tasks_encrypt
+                       """.format(MY_TODO_PASSWORD))
 
         tasks = []
         for row in cursor:
@@ -55,7 +59,10 @@ class MyRequestHandler(BaseHTTPRequestHandler):
 
         cursor = connection.cursor()
 
-        cursor.execute("INSERT INTO tasks (task_name) VALUES (%s)", (task_name,))
+        cursor.execute("""
+                       INSERT INTO tasks_encrypt (task_name) 
+                       VALUES (encrypt_tasks(%s, '{}'))
+                       """.format(MY_TODO_PASSWORD), (task_name,))
         connection.commit()
 
         cursor.close()
@@ -88,7 +95,11 @@ class MyRequestHandler(BaseHTTPRequestHandler):
 
             cursor = connection.cursor()
 
-            cursor.execute("UPDATE tasks SET task_name = %s WHERE id = %s", (updated_task_name, task_id))
+            cursor.execute("""
+                           UPDATE tasks_encrypt 
+                           SET task_name = encrypt_tasks(%s, '{}') 
+                           WHERE id = %s
+                           """.format(MY_TODO_PASSWORD), (updated_task_name, task_id))
             connection.commit()
 
             cursor.close()
@@ -115,7 +126,9 @@ class MyRequestHandler(BaseHTTPRequestHandler):
 
             cursor = connection.cursor()
 
-            cursor.execute("DELETE FROM tasks WHERE id = %s", (task_id,))
+            cursor.execute("""
+                           DELETE FROM tasks_encrypt WHERE id = %s
+                           """, (task_id,))
             connection.commit()
 
             cursor.close()
