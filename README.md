@@ -1,5 +1,21 @@
 # UTS Microservice CRUD API PLSQL UNSIA
 
+Mata Kuliah : Pemrograman PL/SQL
+
+Kelas : IT302
+
+Prodi : PJJ Informatika
+
+Dosen : Abdul Azzam Ajhari, S.Kom., M.Kom
+
+Anggota Kelompok :
+
+-   Wisnu Bayu Aji Fajar Nugroho (220401010079)
+-   Yummiarna (220401020018)
+-   Yohanes Almandaru Tommy Prihatin (220401010110)
+
+<hr><hr><hr>
+
 ## Requirement
 
 -   Sudah terinstal python dan postgresql
